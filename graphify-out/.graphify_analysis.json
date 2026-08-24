@@ -1,0 +1,25 @@
+{
+  "communities": {
+    "0": [
+      "pkg_serviceops"
+    ]
+  },
+  "cohesion": {
+    "0": 1.0
+  },
+  "gods": [
+    {
+      "id": "pkg_serviceops",
+      "label": "serviceops",
+      "degree": 0
+    }
+  ],
+  "surprises": [],
+  "questions": [
+    {
+      "type": "isolated_nodes",
+      "question": "What connects `serviceops` to the rest of the system?",
+      "why": "1 weakly-connected nodes found - possible documentation gaps or missing edges."
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+# Graphify — cost tracking locale (non committare)
+graphify-out/cost.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# IDE
+.idea/
+.vscode/
