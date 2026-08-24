@@ -126,9 +126,9 @@
     "semantic_hash": ""
   },
   "apps/api/package.json": {
-    "mtime": 1787566981.7322018,
-    "seen": 1787567177.121089,
-    "ast_hash": "0982e3366a93fa9f8639e07971ce11e8",
+    "mtime": 1787567932.0973616,
+    "seen": 1787567972.402578,
+    "ast_hash": "fcaa4959b782cc55797c2485df7dcb1f",
     "semantic_hash": ""
   },
   "apps/api/src/activities/activities.controller.ts": {
@@ -168,9 +168,9 @@
     "semantic_hash": ""
   },
   "apps/api/src/auth/auth.module.ts": {
-    "mtime": 1787566071.916457,
-    "seen": 1787566224.733062,
-    "ast_hash": "d45010623da038f94c6621e933856c99",
+    "mtime": 1787567495.0795493,
+    "seen": 1787567972.4025877,
+    "ast_hash": "a044440934a73675bbe4ea452875614f",
     "semantic_hash": ""
   },
   "apps/api/src/auth/auth.service.ts": {
@@ -204,9 +204,9 @@
     "semantic_hash": ""
   },
   "apps/api/src/billing/billing.controller.ts": {
-    "mtime": 1787566981.7242017,
-    "seen": 1787567177.121106,
-    "ast_hash": "3434aebe8f7e79e5ffbd5e3ee0b6ae84",
+    "mtime": 1787567596.2867079,
+    "seen": 1787567972.4025972,
+    "ast_hash": "d65990942768a7d370b0cf964b21c21c",
     "semantic_hash": ""
   },
   "apps/api/src/billing/billing.module.ts": {
@@ -216,9 +216,9 @@
     "semantic_hash": ""
   },
   "apps/api/src/billing/billing.service.ts": {
-    "mtime": 1787567003.1363156,
-    "seen": 1787567177.121107,
-    "ast_hash": "bc4ac0fbbc5ee1ad4b1b47480365a8a4",
+    "mtime": 1787567868.8414826,
+    "seen": 1787567972.4025989,
+    "ast_hash": "98f9d50d88729e2856af9e0c84e37d2e",
     "semantic_hash": ""
   },
   "apps/api/src/common/decorators/auth.decorator.ts": {
@@ -318,9 +318,9 @@
     "semantic_hash": ""
   },
   "apps/api/src/main.ts": {
-    "mtime": 1787567003.1763158,
-    "seen": 1787567177.121122,
-    "ast_hash": "d7b4c5d30e172907d68ba89fc91da183",
+    "mtime": 1787567494.6355536,
+    "seen": 1787567972.4026139,
+    "ast_hash": "65e2445d14a18e964b3c124e89018bcf",
     "semantic_hash": ""
   },
   "apps/api/src/organizations/organizations.controller.ts": {
@@ -480,9 +480,9 @@
     "semantic_hash": ""
   },
   "apps/web/src/app/login/page.tsx": {
-    "mtime": 1787567075.5807211,
-    "seen": 1787567177.1211445,
-    "ast_hash": "cf7929790d601d4c84f9527f9e14cde1",
+    "mtime": 1787567793.0696983,
+    "seen": 1787567972.4026392,
+    "ast_hash": "348e2c4dfd6272fc1d4c603479e110f5",
     "semantic_hash": ""
   },
   "apps/web/src/app/page.tsx": {
@@ -510,9 +510,9 @@
     "semantic_hash": ""
   },
   "apps/web/src/app/settings/page.tsx": {
-    "mtime": 1787566098.06065,
-    "seen": 1787566224.733102,
-    "ast_hash": "8a5236d3d461a42d38da825404ec406d",
+    "mtime": 1787567887.7574413,
+    "seen": 1787567972.4026425,
+    "ast_hash": "a4733686411a389c2fd688a5c9739ac4",
     "semantic_hash": ""
   },
   "apps/web/src/components/layout/app-shell.tsx": {
@@ -618,9 +618,9 @@
     "semantic_hash": ""
   },
   "apps/api/src/billing/dto/billing.dto.ts": {
-    "mtime": 1787566981.7642019,
-    "seen": 1787567177.121108,
-    "ast_hash": "755e66e88ce497dd39a6745e43f76ea2",
+    "mtime": 1787567582.314809,
+    "seen": 1787567972.4026003,
+    "ast_hash": "0565af47619cbe189643252c357c5fa9",
     "semantic_hash": ""
   },
   "apps/api/src/organizations/dto/organizations.dto.ts": {
@@ -630,9 +630,9 @@
     "semantic_hash": ""
   },
   "apps/web/src/app/billing/page.tsx": {
-    "mtime": 1787567124.7450116,
-    "seen": 1787567177.1211379,
-    "ast_hash": "a384406cf4c782e1d0f2823202930d77",
+    "mtime": 1787567901.6334136,
+    "seen": 1787567972.4026325,
+    "ast_hash": "e0383c68f3a8b1452fbd2e167f180b4a",
     "semantic_hash": ""
   },
   "apps/web/src/components/layout/organization-switcher.tsx": {
@@ -657,6 +657,48 @@
     "mtime": 1787567146.397143,
     "seen": 1787567177.1211767,
     "ast_hash": "d5d981107fd428e8f97bcd6454e45431",
+    "semantic_hash": ""
+  },
+  "apps/api/src/auth/dto/sso.dto.ts": {
+    "mtime": 1787567887.3014421,
+    "seen": 1787567972.4025912,
+    "ast_hash": "9360d700c1103055ef3de81dfce4af49",
+    "semantic_hash": ""
+  },
+  "apps/api/src/auth/sso.controller.ts": {
+    "mtime": 1787567567.5109215,
+    "seen": 1787567972.4025946,
+    "ast_hash": "42ca52ed1f1974fd23fdab04da334a69",
+    "semantic_hash": ""
+  },
+  "apps/api/src/auth/sso.service.ts": {
+    "mtime": 1787567932.1053615,
+    "seen": 1787567972.4025953,
+    "ast_hash": "6053b45594b58041ee5d69f91b94a4fc",
+    "semantic_hash": ""
+  },
+  "apps/api/src/telemetry.ts": {
+    "mtime": 1787567932.1493614,
+    "seen": 1787567972.4026215,
+    "ast_hash": "90a4ee63debc4f71342f120fdd2ec698",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/auth/callback/page.tsx": {
+    "mtime": 1787567608.0466259,
+    "seen": 1787567972.4026303,
+    "ast_hash": "26301a6fe37689585813f036f05b6e98",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/billing/invoices/[id]/page.tsx": {
+    "mtime": 1787567962.1733208,
+    "seen": 1787567972.4026315,
+    "ast_hash": "f345753091bad9cb9f399d3a49cea04c",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/billing/quotes/[id]/page.tsx": {
+    "mtime": 1787567962.1733208,
+    "seen": 1787567972.4026332,
+    "ast_hash": "d809cd9321a72a632fdb8f14873e2161",
     "semantic_hash": ""
   }
 }

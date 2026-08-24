@@ -44,7 +44,8 @@ Per un prodotto B2B con molte entità correlate e team che evolve, Prisma offre 
 - JWT Bearer con `organizationId` e `role` nel payload
 - `Membership` collega User ↔ Organization
 - Tutte le query di dominio filtrano per `organizationId` (tenant isolation)
-- Struttura pronta per SSO enterprise (provider abstraction in `auth` module)
+- SSO enterprise OIDC/SAML (`SsoService`, `OrganizationSsoConfig`, `ExternalIdentity`)
+- Callback frontend `/auth/callback` con redirect da API
 
 ## Moduli backend
 
@@ -57,7 +58,7 @@ Per un prodotto B2B con molte entità correlate e team che evolve, Prisma offre 
 | `jobs` | Job, JobItem, stati commessa |
 | `activities` | Ore lavorate, MaterialUsage |
 | `inventory` | Material, InventoryMovement |
-| `billing` | Quote, Invoice, Subscription (skeleton) |
+| `billing` | Quote/Invoice con righe dettaglio, Subscription, Stripe + Lemon Squeezy checkout/webhook |
 | `reports` | KPI dashboard, margini, PDF/CSV export |
 
 ## Multi-tenant
@@ -76,7 +77,7 @@ Per un prodotto B2B con molte entità correlate e team che evolve, Prisma offre 
 | Cache | Non implementata | Redis per sessioni/KPI dashboard |
 | Jobs async | Sync | BullMQ per report pesanti, email |
 | File export | In-process PDF/CSV | S3 + worker per export grandi |
-| Observability | stdout logging | Sentry, OpenTelemetry, Prometheus |
+| Observability | stdout logging + OpenTelemetry opzionale (`OTEL_ENABLED`) | Sentry, Prometheus metrics |
 
 ## Frontend
 
@@ -94,6 +95,8 @@ Per un prodotto B2B con molte entità correlate e team che evolve, Prisma offre 
 
 ## Evoluzione futura
 
-- SSO enterprise (SAML/OIDC)
-- OpenTelemetry tracing distribuito
-- Billing avanzato (righe dettaglio su preventivi/fatture, pagamenti parziali)
+- SSO enterprise: provisioning JIT, rotazione certificati SAML, SCIM
+- OpenTelemetry: metriche e trace sampling in produzione
+- Billing avanzato: pagamenti parziali, multi-currency
+- Cache Redis, job async BullMQ, read replicas DB
+

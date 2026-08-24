@@ -1,16 +1,16 @@
 # Graph Report - workspace  (2026-08-24)
 
 ## Corpus Check
-- 113 files · ~38,511 words
+- 113 files · ~38,521 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 937 nodes · 1679 edges · 88 communities (53 shown, 35 thin omitted)
+- 944 nodes · 1664 edges · 90 communities (49 shown, 41 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 56 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `737f3bbd`
+- Built from commit: `661e7157`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -37,13 +37,13 @@
 - graphify reference: transcribe video and audio
 - .agents/skills/graphify/references/extraction-spec.md
 - .cursor/skills/graphify/references/extraction-spec.md
-- auth.controller.ts
+- auth.decorator.ts
 - dependencies
 - JobsService
-- CrmService
+- AuthUserPayload
 - SsoService
 - devDependencies
-- ActivitiesService
+- activities.controller.ts
 - compilerOptions
 - compilerOptions
 - dependencies
@@ -51,16 +51,17 @@
 - app.module.ts
 - compilerOptions
 - scripts
-- AuthUserPayload
+- computeJobEconomics
 - PrismaService
 - layout.tsx
 - config/package.json
 - nest-cli.json
 - next.config.js
 - users.controller.ts
-- organizations.controller.ts
+- ActivitiesService
 - BillingService
-- OrganizationsController
+- organizations.controller.ts
+- @nestjs/config
 - Italiano
 - web/package.json
 - ServiceOps — Dominio
@@ -69,7 +70,7 @@
 - Avvio rapido (locale)
 - Quick start (local)
 - Backend modules
-- class-transformer
+- passport
 - lucide-react
 - zod
 - @types/node
@@ -85,7 +86,7 @@
 - openid-client
 - @opentelemetry/api
 - @opentelemetry/auto-instrumentations-node
-- @opentelemetry/exporter-trace-otlp-http
+- @tanstack/react-query
 - @opentelemetry/sdk-node
 - passport-jwt
 - pdfkit
@@ -94,15 +95,19 @@
 - rxjs
 - stripe
 - zod
-- @hookform/resolvers
+- Module
+- Patch
+- Query
+- Res
+- IsNumber
 
 ## God Nodes (most connected - your core abstractions)
-1. `AuthUserPayload` - 61 edges
-2. `CurrentUser` - 59 edges
+1. `AuthUserPayload` - 48 edges
+2. `CurrentUser` - 46 edges
 3. `useAuth()` - 37 edges
 4. `BillingService` - 31 edges
 5. `apiFetch()` - 27 edges
-6. `PrismaService` - 26 edges
+6. `PrismaService` - 24 edges
 7. `SsoService` - 19 edges
 8. `compilerOptions` - 19 edges
 9. `CrmService` - 18 edges
@@ -115,15 +120,15 @@
   apps/web/src/app/login/page.tsx → apps/web/src/lib/auth-context.tsx
 - `RegisterPage()` --calls--> `useAuth()`  [EXTRACTED]
   apps/web/src/app/register/page.tsx → apps/web/src/lib/auth-context.tsx
-- `ActivitiesPage()` --calls--> `apiFetch()`  [EXTRACTED]
-  apps/web/src/app/activities/page.tsx → apps/web/src/lib/api.ts
-- `ActivitiesPage()` --calls--> `useAuth()`  [EXTRACTED]
-  apps/web/src/app/activities/page.tsx → apps/web/src/lib/auth-context.tsx
+- `InvoiceDetailPage()` --calls--> `apiFetch()`  [EXTRACTED]
+  apps/web/src/app/billing/invoices/[id]/page.tsx → apps/web/src/lib/api.ts
+- `InvoiceDetailPage()` --calls--> `useAuth()`  [EXTRACTED]
+  apps/web/src/app/billing/invoices/[id]/page.tsx → apps/web/src/lib/auth-context.tsx
 
 ## Import Cycles
 - None detected.
 
-## Communities (88 total, 35 thin omitted)
+## Communities (90 total, 41 thin omitted)
 
 ### Community 0 - "useAuth"
 Cohesion: 0.09
@@ -142,7 +147,7 @@ Cohesion: 0.04
 Nodes (48): devDependencies, jest, @nestjs/cli, @nestjs/schematics, @nestjs/testing, prisma, supertest, ts-jest (+40 more)
 
 ### Community 4 - "InventoryService"
-Cohesion: 0.12
+Cohesion: 0.13
 Nodes (15): CreateInventoryMovementDto, CreateMaterialDto, IsEnum, IsNumber, IsOptional, IsString, MinLength, InventoryController (+7 more)
 
 ### Community 5 - "ServiceOps — Architettura"
@@ -189,33 +194,33 @@ Nodes (3): For git commit hook, For native AGENTS.md integration, graphify refer
 Cohesion: 0.50
 Nodes (3): For --cluster-only, For --update (incremental re-extraction), graphify reference: incremental update and cluster-only
 
-### Community 22 - "auth.controller.ts"
-Cohesion: 0.12
-Nodes (18): AuthController, Body, Controller, Get, Post, AuthService, Injectable, LoginDto (+10 more)
+### Community 22 - "auth.decorator.ts"
+Cohesion: 0.06
+Nodes (33): AuthController, Body, Controller, Get, Post, AuthService, Injectable, LoginDto (+25 more)
 
 ### Community 23 - "dependencies"
 Cohesion: 0.29
-Nodes (7): dependencies, bcrypt, @nestjs/config, passport, bcrypt, @nestjs/config, passport
+Nodes (7): dependencies, bcrypt, class-transformer, @opentelemetry/exporter-trace-otlp-http, bcrypt, class-transformer, @opentelemetry/exporter-trace-otlp-http
 
 ### Community 24 - "JobsService"
-Cohesion: 0.17
-Nodes (12): CreateJobDto, CreateJobItemDto, IsDateString, IsEnum, IsNumber, IsOptional, IsString, MinLength (+4 more)
+Cohesion: 0.10
+Nodes (22): CreateJobDto, CreateJobItemDto, IsDateString, IsEnum, IsNumber, IsOptional, IsString, MinLength (+14 more)
 
-### Community 25 - "CrmService"
-Cohesion: 0.16
-Nodes (10): CrmService, Injectable, CreateContactDto, CreateCustomerDto, CreateSiteDto, IsEmail, IsOptional, IsString (+2 more)
+### Community 25 - "AuthUserPayload"
+Cohesion: 0.09
+Nodes (27): ActivitiesController, Body, Controller, Get, Post, Query, AuthUserPayload, CurrentUser (+19 more)
 
 ### Community 26 - "SsoService"
-Cohesion: 0.07
-Nodes (26): IsEnum, IsOptional, IsString, MinLength, UpdateSsoConfigDto, JwtAuthGuard, Injectable, SsoController (+18 more)
+Cohesion: 0.12
+Nodes (13): SsoController, Body, Controller, CurrentUser, Get, Param, Post, Public (+5 more)
 
 ### Community 27 - "devDependencies"
 Cohesion: 0.12
 Nodes (17): devDependencies, autoprefixer, eslint, eslint-config-next, postcss, tailwindcss, @types/react, @types/react-dom (+9 more)
 
-### Community 28 - "ActivitiesService"
-Cohesion: 0.13
-Nodes (15): ActivitiesController, Body, Controller, Get, Post, Query, ActivitiesService, Injectable (+7 more)
+### Community 28 - "activities.controller.ts"
+Cohesion: 0.28
+Nodes (9): ActivitiesModule, Module, CreateActivityDto, CreateMaterialUsageDto, IsDateString, IsNumber, IsOptional, IsString (+1 more)
 
 ### Community 29 - "compilerOptions"
 Cohesion: 0.07
@@ -227,7 +232,7 @@ Nodes (25): compilerOptions, allowSyntheticDefaultImports, baseUrl, declaration,
 
 ### Community 31 - "dependencies"
 Cohesion: 0.12
-Nodes (17): dependencies, class-variance-authority, clsx, next, react, react-dom, react-hook-form, tailwind-merge (+9 more)
+Nodes (17): dependencies, class-variance-authority, clsx, @hookform/resolvers, next, react, react-dom, react-hook-form (+9 more)
 
 ### Community 32 - "English"
 Cohesion: 0.18
@@ -235,7 +240,7 @@ Nodes (11): Adding a backend module, Commands, Documentation, English, Graphify,
 
 ### Community 33 - "app.module.ts"
 Cohesion: 0.11
-Nodes (16): ActivitiesModule, Module, AuthModule, Module, BillingModule, Module, GlobalExceptionFilter, CrmModule (+8 more)
+Nodes (14): AppModule, Module, AuthModule, BillingModule, Module, GlobalExceptionFilter, CrmModule, Module (+6 more)
 
 ### Community 34 - "compilerOptions"
 Cohesion: 0.12
@@ -245,13 +250,13 @@ Nodes (16): compilerOptions, esModuleInterop, forceConsistentCasingInFileNames, 
 Cohesion: 0.12
 Nodes (15): devDependencies, typescript, typescript, name, packageManager, private, scripts, build (+7 more)
 
-### Community 36 - "AuthUserPayload"
-Cohesion: 0.08
-Nodes (33): BillingController, Body, Controller, Get, Param, Post, AuthUserPayload, CurrentUser (+25 more)
+### Community 36 - "computeJobEconomics"
+Cohesion: 0.15
+Nodes (11): computeJobEconomics(), decimalToNumber(), JobEconomics, ReportsController, Controller, Get, Param, Res (+3 more)
 
 ### Community 37 - "PrismaService"
-Cohesion: 0.15
-Nodes (7): AppModule, Module, PrismaModule, Module, PrismaService, Injectable, Global
+Cohesion: 0.17
+Nodes (5): PrismaModule, Module, PrismaService, Injectable, Global
 
 ### Community 38 - "layout.tsx"
 Cohesion: 0.40
@@ -269,17 +274,13 @@ Nodes (5): collection, compilerOptions, deleteOutDir, $schema, sourceRoot
 Cohesion: 0.23
 Nodes (7): Controller, Get, UsersController, Module, UsersModule, Injectable, UsersService
 
-### Community 48 - "organizations.controller.ts"
-Cohesion: 0.29
-Nodes (6): slugify(), CreateOrganizationDto, IsString, MinLength, OrganizationsService, Injectable
-
 ### Community 49 - "BillingService"
-Cohesion: 0.07
-Nodes (18): BillingService, Injectable, CreateCheckoutDto, CreateDocumentLineDto, CreateInvoiceFromJobDto, CreateQuoteFromJobDto, IsEnum, IsNumber (+10 more)
+Cohesion: 0.08
+Nodes (21): BillingController, Body, Controller, CurrentUser, Get, Param, Post, Public (+13 more)
 
-### Community 50 - "OrganizationsController"
-Cohesion: 0.18
-Nodes (6): OrganizationsController, Body, Controller, Get, Patch, Post
+### Community 50 - "organizations.controller.ts"
+Cohesion: 0.13
+Nodes (14): slugify(), CreateOrganizationDto, IsString, MinLength, OrganizationsController, Body, Controller, Get (+6 more)
 
 ### Community 52 - "Italiano"
 Cohesion: 0.18
@@ -306,20 +307,18 @@ Cohesion: 0.50
 Nodes (4): Docker Compose, Prerequisites, Quick start (local), Setup
 
 ## Knowledge Gaps
-- **323 isolated node(s):** `$schema`, `collection`, `sourceRoot`, `deleteOutDir`, `name` (+318 more)
+- **323 isolated node(s):** `name`, `version`, `private`, `build`, `dev` (+318 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **35 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **41 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `AuthUserPayload` connect `AuthUserPayload` to `InventoryService`, `users.controller.ts`, `organizations.controller.ts`, `BillingService`, `OrganizationsController`, `auth.controller.ts`, `JobsService`, `CrmService`, `SsoService`, `ActivitiesService`?**
-  _High betweenness centrality (0.051) - this node is a cross-community bridge._
-- **Why does `CurrentUser` connect `AuthUserPayload` to `InventoryService`, `users.controller.ts`, `organizations.controller.ts`, `BillingService`, `OrganizationsController`, `auth.controller.ts`, `JobsService`, `CrmService`, `SsoService`, `ActivitiesService`?**
+- **Why does `AuthUserPayload` connect `AuthUserPayload` to `InventoryService`, `computeJobEconomics`, `users.controller.ts`, `BillingService`, `organizations.controller.ts`, `auth.decorator.ts`, `JobsService`, `activities.controller.ts`?**
   _High betweenness centrality (0.048) - this node is a cross-community bridge._
-- **Why does `PrismaService` connect `PrismaService` to `InventoryService`, `users.controller.ts`, `organizations.controller.ts`, `BillingService`, `auth.controller.ts`, `JobsService`, `CrmService`, `SsoService`, `ActivitiesService`?**
-  _High betweenness centrality (0.016) - this node is a cross-community bridge._
-- **What connects `$schema`, `collection`, `sourceRoot` to the rest of the system?**
+- **Why does `CurrentUser` connect `AuthUserPayload` to `InventoryService`, `computeJobEconomics`, `users.controller.ts`, `BillingService`, `organizations.controller.ts`, `auth.decorator.ts`, `JobsService`, `activities.controller.ts`?**
+  _High betweenness centrality (0.045) - this node is a cross-community bridge._
+- **What connects `name`, `version`, `private` to the rest of the system?**
   _323 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `useAuth` be split into smaller, more focused modules?**
   _Cohesion score 0.08860759493670886 - nodes in this community are weakly interconnected._
@@ -327,3 +326,5 @@ _Questions this graph is uniquely positioned to answer:_
   _Cohesion score 0.08 - nodes in this community are weakly interconnected._
 - **Should `What You Must Do When Invoked` be split into smaller, more focused modules?**
   _Cohesion score 0.08 - nodes in this community are weakly interconnected._
+- **Should `devDependencies` be split into smaller, more focused modules?**
+  _Cohesion score 0.04081632653061224 - nodes in this community are weakly interconnected._
