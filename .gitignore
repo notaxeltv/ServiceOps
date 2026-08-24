@@ -1,7 +1,23 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Environment
+.env
+.env.local
+apps/api/.env
+apps/web/.env
+
+# Build
+dist/
+.next/
+out/
+coverage/
+
 # Graphify — cost tracking locale (non committare)
 graphify-out/cost.json
 
-# Python
+# Python (graphify tooling)
 __pycache__/
 *.py[cod]
 .venv/
