@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { AppShell } from '@/components/layout/app-shell';
 import { AuthGuard } from '@/components/layout/auth-guard';
@@ -7,20 +8,20 @@ import { Button, Card } from '@/components/ui/primitives';
 import { apiFetch } from '@/lib/api';
 import { useAuth } from '@/lib/auth-context';
 
+interface DocumentLine {
+  id: string;
+  description: string;
+  quantity: number;
+  unitPrice: number;
+}
+
 interface Quote {
   id: string;
   number: string;
   status: string;
   totalAmount: number;
   job?: { title: string };
-}
-
-interface Invoice {
-  id: string;
-  number: string;
-  status: string;
-  totalAmount: number;
-  job?: { title: string };
+  lines?: DocumentLine[];
 }
 
 export default function BillingPage() {
@@ -33,19 +34,19 @@ export default function BillingPage() {
 
   const { data: invoices } = useQuery({
     queryKey: ['invoices'],
-    queryFn: () => apiFetch<Invoice[]>('/billing/invoices', {}, token),
+    queryFn: () => apiFetch<Quote[]>('/billing/invoices', {}, token),
   });
 
   const { data: subscription } = useQuery({
     queryKey: ['subscription'],
-    queryFn: () => apiFetch<{ plan: string; status: string }>('/billing/subscription', {}, token),
+    queryFn: () => apiFetch<{ plan: string; status: string; paymentProvider?: string }>('/billing/subscription', {}, token),
   });
 
   const checkout = useMutation({
-    mutationFn: (plan: 'PRO' | 'BUSINESS') =>
+    mutationFn: (params: { plan: 'PRO' | 'BUSINESS'; provider?: string }) =>
       apiFetch<{ url: string }>(
-        '/billing/stripe/checkout',
-        { method: 'POST', body: JSON.stringify({ plan }) },
+        '/billing/checkout',
+        { method: 'POST', body: JSON.stringify(params) },
         token,
       ),
     onSuccess: (data) => {
@@ -62,20 +63,22 @@ export default function BillingPage() {
           <h3 className="mb-2 font-semibold">Subscription</h3>
           <p className="text-sm text-slate-600">
             Piano: {subscription?.plan ?? 'FREE'} — {subscription?.status ?? 'active'}
+            {subscription?.paymentProvider ? ` (${subscription.paymentProvider})` : ''}
           </p>
-          <div className="mt-4 flex gap-2">
-            <Button variant="outline" onClick={() => checkout.mutate('PRO')} disabled={checkout.isPending}>
-              Upgrade Pro
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Button variant="outline" onClick={() => checkout.mutate({ plan: 'PRO', provider: 'STRIPE' })}>
+              Pro (Stripe)
             </Button>
-            <Button variant="outline" onClick={() => checkout.mutate('BUSINESS')} disabled={checkout.isPending}>
-              Upgrade Business
+            <Button variant="outline" onClick={() => checkout.mutate({ plan: 'BUSINESS', provider: 'STRIPE' })}>
+              Business (Stripe)
+            </Button>
+            <Button variant="outline" onClick={() => checkout.mutate({ plan: 'PRO', provider: 'LEMONSQUEEZY' })}>
+              Pro (Lemon)
+            </Button>
+            <Button variant="outline" onClick={() => checkout.mutate({ plan: 'BUSINESS', provider: 'LEMONSQUEEZY' })}>
+              Business (Lemon)
             </Button>
           </div>
-          {checkout.isError && (
-            <p className="mt-2 text-sm text-amber-600">
-              Stripe non configurato o prezzi mancanti. Imposta STRIPE_SECRET_KEY nell&apos;API.
-            </p>
-          )}
         </Card>
 
         <div className="grid gap-6 lg:grid-cols-2">
@@ -84,7 +87,9 @@ export default function BillingPage() {
             <ul className="space-y-2 text-sm">
               {quotes?.map((q) => (
                 <li key={q.id} className="flex justify-between border-b border-slate-100 py-2">
-                  <span>{q.number} — {q.job?.title}</span>
+                  <Link href={`/billing/quotes/${q.id}`} className="text-blue-600 hover:underline">
+                    {q.number} — {q.job?.title}
+                  </Link>
                   <span>€{Number(q.totalAmount).toFixed(2)} ({q.status})</span>
                 </li>
               ))}
@@ -95,7 +100,9 @@ export default function BillingPage() {
             <ul className="space-y-2 text-sm">
               {invoices?.map((inv) => (
                 <li key={inv.id} className="flex justify-between border-b border-slate-100 py-2">
-                  <span>{inv.number} — {inv.job?.title}</span>
+                  <Link href={`/billing/invoices/${inv.id}`} className="text-blue-600 hover:underline">
+                    {inv.number} — {inv.job?.title}
+                  </Link>
                   <span>€{Number(inv.totalAmount).toFixed(2)} ({inv.status})</span>
                 </li>
               ))}

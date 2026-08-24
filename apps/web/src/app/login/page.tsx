@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
@@ -7,6 +8,7 @@ import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
 import { loginSchema } from '@/lib/schemas';
 import { Button, Card, Input, Label } from '@/components/ui/primitives';
+import { API_URL } from '@/lib/api';
 import { z } from 'zod';
 
 type LoginForm = z.infer<typeof loginSchema>;
@@ -14,6 +16,8 @@ type LoginForm = z.infer<typeof loginSchema>;
 export default function LoginPage() {
   const { login } = useAuth();
   const router = useRouter();
+  const [orgSlug, setOrgSlug] = useState('');
+  const [ssoProvider, setSsoProvider] = useState<'oidc' | 'saml'>('oidc');
   const {
     register,
     handleSubmit,
@@ -53,6 +57,28 @@ export default function LoginPage() {
         <p className="mt-4 text-center text-sm text-slate-500">
           Non hai un account? <Link href="/register" className="text-blue-600">Registrati</Link>
         </p>
+        <div className="mt-6 border-t border-slate-200 pt-4">
+          <Label>SSO enterprise (slug organizzazione)</Label>
+          <select
+            className="mt-2 w-full rounded border border-slate-300 px-3 py-2 text-sm"
+            value={ssoProvider}
+            onChange={(e) => setSsoProvider(e.target.value as 'oidc' | 'saml')}
+          >
+            <option value="oidc">OIDC</option>
+            <option value="saml">SAML</option>
+          </select>
+          <div className="mt-2 flex gap-2">
+            <Input value={orgSlug} onChange={(e) => setOrgSlug(e.target.value)} placeholder="mio-slug" />
+            <Button
+              variant="outline"
+              onClick={() => {
+                if (orgSlug) window.location.href = `${API_URL}/auth/sso/${ssoProvider}/${orgSlug}`;
+              }}
+            >
+              SSO {ssoProvider === 'saml' ? 'SAML' : 'OIDC'}
+            </Button>
+          </div>
+        </div>
       </Card>
     </div>
   );

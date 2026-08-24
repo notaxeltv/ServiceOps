@@ -1,15 +1,16 @@
 # Graph Report - workspace  (2026-08-24)
 
 ## Corpus Check
-- cluster-only mode — file stats not available
+- 106 files · ~35,141 words
+- Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 755 nodes · 1211 edges · 56 communities (44 shown, 12 thin omitted)
-- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 31 edges (avg confidence: 0.8)
+- 852 nodes · 1394 edges · 61 communities (45 shown, 16 thin omitted)
+- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 42 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b9c6befb`
+- Built from commit: `737f3bbd`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -18,8 +19,8 @@
 - What You Must Do When Invoked
 - What You Must Do When Invoked
 - devDependencies
-- CurrentUser
-- ServiceOps
+- InventoryService
+- ServiceOps — Architettura
 - graphify reference: extra exports and benchmark
 - graphify reference: extra exports and benchmark
 - graphify reference: query, path, explain
@@ -36,66 +37,73 @@
 - graphify reference: transcribe video and audio
 - .agents/skills/graphify/references/extraction-spec.md
 - .cursor/skills/graphify/references/extraction-spec.md
-- auth.decorator.ts
+- auth.controller.ts
 - dependencies
-- AuthUserPayload
+- JobsService
 - CrmService
-- ActivitiesService
+- @tanstack/react-query
 - devDependencies
-- ReportsService
+- AuthUserPayload
 - compilerOptions
 - compilerOptions
 - dependencies
+- English
 - app.module.ts
-- OrganizationsService
 - compilerOptions
 - scripts
-- users.controller.ts
-- PrismaService
+- Param
+- IsEmail
 - layout.tsx
 - config/package.json
 - nest-cli.json
 - next.config.js
+- organizations.controller.ts
 - BillingService
+- IsEnum
+- Italiano
 - web/package.json
-- AppModule
-- @hookform/resolvers
+- ServiceOps — Dominio
+- Entità principali
+- README.md
+- Avvio rapido (locale)
+- Quick start (local)
+- Backend modules
 - lucide-react
 - zod
 - @types/node
 
 ## God Nodes (most connected - your core abstractions)
-1. `AuthUserPayload` - 43 edges
-2. `CurrentUser` - 41 edges
-3. `useAuth()` - 27 edges
-4. `PrismaService` - 24 edges
-5. `apiFetch()` - 20 edges
-6. `compilerOptions` - 19 edges
-7. `compilerOptions` - 16 edges
-8. `compilerOptions` - 14 edges
-9. `CrmService` - 13 edges
-10. `Card()` - 13 edges
+1. `useAuth()` - 31 edges
+2. `AuthUserPayload` - 27 edges
+3. `CurrentUser` - 25 edges
+4. `apiFetch()` - 23 edges
+5. `compilerOptions` - 19 edges
+6. `CrmService` - 18 edges
+7. `PrismaService` - 18 edges
+8. `BillingService` - 16 edges
+9. `compilerOptions` - 16 edges
+10. `CrmController` - 14 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `LoginPage()` --calls--> `useAuth()`  [EXTRACTED]
   apps/web/src/app/login/page.tsx → apps/web/src/lib/auth-context.tsx
 - `RegisterPage()` --calls--> `useAuth()`  [EXTRACTED]
   apps/web/src/app/register/page.tsx → apps/web/src/lib/auth-context.tsx
-- `ActivitiesPage()` --calls--> `apiFetch()`  [EXTRACTED]
-  apps/web/src/app/activities/page.tsx → apps/web/src/lib/api.ts
-- `ActivitiesPage()` --calls--> `useAuth()`  [EXTRACTED]
-  apps/web/src/app/activities/page.tsx → apps/web/src/lib/auth-context.tsx
+- `BillingPage()` --calls--> `apiFetch()`  [EXTRACTED]
+  apps/web/src/app/billing/page.tsx → apps/web/src/lib/api.ts
+- `BillingPage()` --calls--> `useAuth()`  [EXTRACTED]
+  apps/web/src/app/billing/page.tsx → apps/web/src/lib/auth-context.tsx
 - `CustomerDetailPage()` --calls--> `apiFetch()`  [EXTRACTED]
   apps/web/src/app/customers/[id]/page.tsx → apps/web/src/lib/api.ts
 
 ## Import Cycles
 - None detected.
 
-## Communities (56 total, 12 thin omitted)
+## Communities (61 total, 16 thin omitted)
 
 ### Community 0 - "useAuth"
-Cohesion: 0.14
-Nodes (32): ActivitiesPage(), CustomerDetailPage(), Customer, CustomersPage(), DashboardKpis, DashboardPage(), InventoryPage(), JobDetail (+24 more)
+Cohesion: 0.10
+Nodes (46): ActivitiesPage(), BillingPage(), Invoice, Quote, Contact, CustomerDetailPage(), Customer, CustomersPage() (+38 more)
 
 ### Community 1 - "What You Must Do When Invoked"
 Cohesion: 0.08
@@ -109,13 +117,13 @@ Nodes (24): For /graphify add and --watch, For /graphify query, For the commit h
 Cohesion: 0.04
 Nodes (48): devDependencies, jest, @nestjs/cli, @nestjs/schematics, @nestjs/testing, prisma, supertest, ts-jest (+40 more)
 
-### Community 4 - "CurrentUser"
-Cohesion: 0.13
-Nodes (16): CurrentUser, CreateInventoryMovementDto, CreateMaterialDto, IsEnum, IsNumber, IsOptional, IsString, MinLength (+8 more)
+### Community 4 - "InventoryService"
+Cohesion: 0.12
+Nodes (16): CreateInventoryMovementDto, CreateMaterialDto, IsEnum, IsNumber, IsOptional, IsString, MinLength, InventoryController (+8 more)
 
-### Community 5 - "ServiceOps"
-Cohesion: 0.05
-Nodes (40): Auth, DevOps, Frontend, Moduli backend, Multi-tenant, Panoramica, Prisma vs Drizzle, REST vs GraphQL (+32 more)
+### Community 5 - "ServiceOps — Architettura"
+Cohesion: 0.17
+Nodes (12): Auth, DevOps, Evoluzione futura, Frontend, Moduli backend, Multi-tenant, Panoramica, Prisma vs Drizzle (+4 more)
 
 ### Community 6 - "graphify reference: extra exports and benchmark"
 Cohesion: 0.22
@@ -157,33 +165,29 @@ Nodes (3): For git commit hook, For native AGENTS.md integration, graphify refer
 Cohesion: 0.50
 Nodes (3): For --cluster-only, For --update (incremental re-extraction), graphify reference: incremental update and cluster-only
 
-### Community 22 - "auth.decorator.ts"
-Cohesion: 0.09
-Nodes (23): AuthController, Body, Controller, Get, Post, AuthService, Injectable, LoginDto (+15 more)
+### Community 22 - "auth.controller.ts"
+Cohesion: 0.07
+Nodes (27): AuthController, Body, Controller, CurrentUser, Get, Post, Public, AuthService (+19 more)
 
 ### Community 23 - "dependencies"
 Cohesion: 0.05
-Nodes (37): dependencies, bcrypt, class-transformer, class-validator, csv-stringify, @nestjs/common, @nestjs/config, @nestjs/core (+29 more)
+Nodes (39): dependencies, bcrypt, class-transformer, class-validator, csv-stringify, @nestjs/common, @nestjs/config, @nestjs/core (+31 more)
 
-### Community 24 - "AuthUserPayload"
-Cohesion: 0.10
-Nodes (23): Get, Query, AuthUserPayload, CreateJobDto, CreateJobItemDto, IsDateString, IsEnum, IsNumber (+15 more)
+### Community 24 - "JobsService"
+Cohesion: 0.14
+Nodes (18): CreateJobDto, CreateJobItemDto, IsDateString, IsEnum, IsNumber, IsOptional, IsString, MinLength (+10 more)
 
 ### Community 25 - "CrmService"
 Cohesion: 0.11
-Nodes (16): CrmController, Body, Controller, Get, Param, Patch, Post, Query (+8 more)
-
-### Community 26 - "ActivitiesService"
-Cohesion: 0.13
-Nodes (15): ActivitiesController, Body, Controller, Post, ActivitiesModule, Module, ActivitiesService, Injectable (+7 more)
+Nodes (20): CrmController, Body, Controller, CurrentUser, Get, Patch, Post, Query (+12 more)
 
 ### Community 27 - "devDependencies"
 Cohesion: 0.12
 Nodes (17): devDependencies, autoprefixer, eslint, eslint-config-next, postcss, tailwindcss, @types/react, @types/react-dom (+9 more)
 
-### Community 28 - "ReportsService"
-Cohesion: 0.15
-Nodes (11): computeJobEconomics(), decimalToNumber(), JobEconomics, ReportsController, Controller, Get, Param, ReportsService (+3 more)
+### Community 28 - "AuthUserPayload"
+Cohesion: 0.07
+Nodes (30): ActivitiesController, Body, Controller, Get, Post, Query, ActivitiesService, Injectable (+22 more)
 
 ### Community 29 - "compilerOptions"
 Cohesion: 0.07
@@ -195,15 +199,15 @@ Nodes (25): compilerOptions, allowSyntheticDefaultImports, baseUrl, declaration,
 
 ### Community 31 - "dependencies"
 Cohesion: 0.12
-Nodes (17): dependencies, class-variance-authority, clsx, next, react, react-dom, react-hook-form, tailwind-merge (+9 more)
+Nodes (17): dependencies, class-variance-authority, clsx, @hookform/resolvers, next, react, react-dom, react-hook-form (+9 more)
 
-### Community 32 - "app.module.ts"
-Cohesion: 0.11
-Nodes (16): AuthModule, Module, BillingModule, Module, GlobalExceptionFilter, CrmModule, Module, InventoryModule (+8 more)
+### Community 32 - "English"
+Cohesion: 0.18
+Nodes (11): Adding a backend module, Commands, Documentation, English, Graphify, License, MVP flows, Overview (+3 more)
 
-### Community 33 - "OrganizationsService"
-Cohesion: 0.20
-Nodes (7): OrganizationsController, Body, Controller, Get, Patch, OrganizationsService, Injectable
+### Community 33 - "app.module.ts"
+Cohesion: 0.06
+Nodes (32): ActivitiesModule, Module, AppModule, Module, AuthModule, Module, BillingModule, Module (+24 more)
 
 ### Community 34 - "compilerOptions"
 Cohesion: 0.12
@@ -213,17 +217,9 @@ Nodes (16): compilerOptions, esModuleInterop, forceConsistentCasingInFileNames, 
 Cohesion: 0.12
 Nodes (15): devDependencies, typescript, typescript, name, packageManager, private, scripts, build (+7 more)
 
-### Community 36 - "users.controller.ts"
-Cohesion: 0.21
-Nodes (7): Controller, Get, UsersController, Module, UsersModule, Injectable, UsersService
-
-### Community 37 - "PrismaService"
-Cohesion: 0.18
-Nodes (5): PrismaModule, Module, PrismaService, Injectable, Global
-
 ### Community 38 - "layout.tsx"
-Cohesion: 0.33
-Nodes (4): inter, metadata, Providers(), AuthProvider()
+Cohesion: 0.40
+Nodes (3): inter, metadata, Providers()
 
 ### Community 39 - "config/package.json"
 Cohesion: 0.29
@@ -233,32 +229,56 @@ Nodes (6): files, name, private, version, eslint.base.cjs, tsconfig.base.json
 Cohesion: 0.33
 Nodes (5): collection, compilerOptions, deleteOutDir, $schema, sourceRoot
 
-### Community 49 - "BillingService"
-Cohesion: 0.21
-Nodes (5): BillingController, Controller, Get, BillingService, Injectable
+### Community 48 - "organizations.controller.ts"
+Cohesion: 0.14
+Nodes (13): slugify(), CreateOrganizationDto, IsString, MinLength, OrganizationsController, Body, Controller, CurrentUser (+5 more)
 
-### Community 50 - "web/package.json"
+### Community 49 - "BillingService"
+Cohesion: 0.10
+Nodes (18): BillingController, Body, Controller, CurrentUser, Get, Post, Public, BillingService (+10 more)
+
+### Community 52 - "Italiano"
+Cohesion: 0.18
+Nodes (11): Aggiungere un modulo backend, Comandi, Documentazione, Flussi MVP, Graphify, Italiano, Licenza, Panoramica (+3 more)
+
+### Community 53 - "web/package.json"
 Cohesion: 0.20
 Nodes (9): name, private, scripts, build, dev, lint, start, typecheck (+1 more)
 
+### Community 54 - "ServiceOps — Dominio"
+Cohesion: 0.25
+Nodes (8): Casi d'uso, Flussi MVP implementati, Impresa installazione, Officina meccanica, Relazioni, ServiceOps — Dominio, Studio tecnico, Visione
+
+### Community 55 - "Entità principali"
+Cohesion: 0.29
+Nodes (7): Attività e costi, Billing (skeleton), Commesse, CRM, Economia, Entità principali, Organizzazione (tenant)
+
+### Community 57 - "Avvio rapido (locale)"
+Cohesion: 0.50
+Nodes (4): Avvio rapido (locale), Docker Compose, Prerequisiti, Setup
+
+### Community 58 - "Quick start (local)"
+Cohesion: 0.50
+Nodes (4): Docker Compose, Prerequisites, Quick start (local), Setup
+
 ## Knowledge Gaps
-- **286 isolated node(s):** `Customer`, `DashboardKpis`, `JobDetail`, `Customer`, `Job` (+281 more)
+- **311 isolated node(s):** `Panoramica`, `Prisma vs Drizzle`, `REST vs GraphQL`, `Auth`, `Moduli backend` (+306 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **12 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **16 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `AuthUserPayload` connect `AuthUserPayload` to `OrganizationsService`, `CurrentUser`, `users.controller.ts`, `BillingService`, `auth.decorator.ts`, `CrmService`, `ActivitiesService`, `ReportsService`?**
-  _High betweenness centrality (0.038) - this node is a cross-community bridge._
-- **Why does `CurrentUser` connect `CurrentUser` to `OrganizationsService`, `users.controller.ts`, `BillingService`, `auth.decorator.ts`, `AuthUserPayload`, `CrmService`, `ActivitiesService`, `ReportsService`?**
-  _High betweenness centrality (0.035) - this node is a cross-community bridge._
-- **Why does `PrismaService` connect `PrismaService` to `OrganizationsService`, `CurrentUser`, `users.controller.ts`, `BillingService`, `AppModule`, `auth.decorator.ts`, `AuthUserPayload`, `CrmService`, `ActivitiesService`, `ReportsService`?**
-  _High betweenness centrality (0.014) - this node is a cross-community bridge._
-- **What connects `Customer`, `DashboardKpis`, `JobDetail` to the rest of the system?**
-  _286 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Why does `AuthUserPayload` connect `AuthUserPayload` to `app.module.ts`, `InventoryService`, `organizations.controller.ts`, `BillingService`, `auth.controller.ts`, `JobsService`, `CrmService`?**
+  _High betweenness centrality (0.034) - this node is a cross-community bridge._
+- **Why does `CurrentUser` connect `AuthUserPayload` to `app.module.ts`, `InventoryService`, `organizations.controller.ts`, `BillingService`, `auth.controller.ts`, `JobsService`, `CrmService`?**
+  _High betweenness centrality (0.031) - this node is a cross-community bridge._
+- **Why does `PrismaService` connect `app.module.ts` to `InventoryService`, `organizations.controller.ts`, `BillingService`, `auth.controller.ts`, `JobsService`, `CrmService`, `AuthUserPayload`?**
+  _High betweenness centrality (0.013) - this node is a cross-community bridge._
+- **What connects `Panoramica`, `Prisma vs Drizzle`, `REST vs GraphQL` to the rest of the system?**
+  _311 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `useAuth` be split into smaller, more focused modules?**
-  _Cohesion score 0.14404223227752638 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.09931798806479114 - nodes in this community are weakly interconnected._
 - **Should `What You Must Do When Invoked` be split into smaller, more focused modules?**
   _Cohesion score 0.08 - nodes in this community are weakly interconnected._
 - **Should `What You Must Do When Invoked` be split into smaller, more focused modules?**

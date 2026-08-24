@@ -1,5 +1,5 @@
-import { IsEnum, IsOptional, IsString, MinLength } from 'class-validator';
-import { SubscriptionPlan } from '@prisma/client';
+import { IsEnum, IsNumber, IsOptional, IsString, MinLength } from 'class-validator';
+import { PaymentProvider, SubscriptionPlan } from '@prisma/client';
 
 export class CreateQuoteFromJobDto {
   @IsString() @MinLength(1) jobId!: string;
@@ -14,4 +14,14 @@ export class CreateInvoiceFromJobDto {
 export class CreateCheckoutDto {
   @IsEnum(SubscriptionPlan)
   plan!: SubscriptionPlan;
+
+  @IsOptional()
+  @IsEnum(PaymentProvider)
+  provider?: PaymentProvider;
+}
+
+export class CreateDocumentLineDto {
+  @IsString() @MinLength(1) description!: string;
+  @IsNumber() quantity!: number;
+  @IsNumber() unitPrice!: number;
 }

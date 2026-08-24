@@ -48,6 +48,16 @@ enum DocumentStatus {
   CANCELLED
 }
 
+enum SsoProvider {
+  OIDC
+  SAML
+}
+
+enum PaymentProvider {
+  STRIPE
+  LEMONSQUEEZY
+}
+
 model Organization {
   id        String   @id @default(cuid())
   name      String
@@ -67,6 +77,8 @@ model Organization {
   invoices    Invoice[]
   subscriptions Subscription[]
 
+  ssoConfig OrganizationSsoConfig?
+
   @@map("organizations")
 }
 
@@ -81,6 +93,7 @@ model User {
 
   memberships Membership[]
   activities  Activity[]
+  externalIdentities ExternalIdentity[]
 
   @@map("users")
 }
@@ -310,10 +323,27 @@ model Quote {
 
   organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   job          Job?         @relation(fields: [jobId], references: [id], onDelete: SetNull)
+  lines        QuoteLine[]
 
   @@unique([organizationId, number])
   @@index([organizationId])
   @@map("quotes")
+}
+
+model QuoteLine {
+  id             String  @id @default(cuid())
+  organizationId String
+  quoteId        String
+  description    String
+  quantity       Decimal @default(1) @db.Decimal(12, 4)
+  unitPrice      Decimal @default(0) @db.Decimal(12, 4)
+  createdAt      DateTime @default(now())
+
+  quote Quote @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([organizationId, quoteId])
+  @@map("quote_lines")
 }
 
 model Invoice {
@@ -330,25 +360,80 @@ model Invoice {
 
   organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   job          Job?         @relation(fields: [jobId], references: [id], onDelete: SetNull)
+  lines        InvoiceLine[]
 
   @@unique([organizationId, number])
   @@index([organizationId])
   @@map("invoices")
 }
 
+model InvoiceLine {
+  id             String  @id @default(cuid())
+  organizationId String
+  invoiceId      String
+  description    String
+  quantity       Decimal @default(1) @db.Decimal(12, 4)
+  unitPrice      Decimal @default(0) @db.Decimal(12, 4)
+  createdAt      DateTime @default(now())
+
+  invoice Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([organizationId, invoiceId])
+  @@map("invoice_lines")
+}
+
 model Subscription {
-  id                   String           @id @default(cuid())
-  organizationId       String
-  plan                 SubscriptionPlan @default(FREE)
-  stripeCustomerId     String?
-  stripeSubscriptionId String?
-  status               String           @default("active")
-  currentPeriodEnd     DateTime?
-  createdAt            DateTime         @default(now())
-  updatedAt            DateTime         @updatedAt
+  id                         String           @id @default(cuid())
+  organizationId             String
+  plan                       SubscriptionPlan @default(FREE)
+  paymentProvider            PaymentProvider  @default(STRIPE)
+  stripeCustomerId           String?
+  stripeSubscriptionId       String?
+  lemonSqueezyCustomerId     String?
+  lemonSqueezySubscriptionId String?
+  status                     String           @default("active")
+  currentPeriodEnd           DateTime?
+  createdAt                  DateTime         @default(now())
+  updatedAt                  DateTime         @updatedAt
 
   organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
   @@index([organizationId])
   @@map("subscriptions")
+}
+
+model OrganizationSsoConfig {
+  id             String      @id @default(cuid())
+  organizationId String      @unique
+  provider       SsoProvider
+  enabled        Boolean     @default(false)
+  issuer         String
+  clientId       String?
+  clientSecret   String?
+  metadataUrl    String?
+  idpCert        String?
+  emailAttribute String      @default("email")
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("organization_sso_configs")
+}
+
+model ExternalIdentity {
+  id             String      @id @default(cuid())
+  userId         String
+  organizationId String
+  provider       SsoProvider
+  externalId     String
+  email          String
+  createdAt      DateTime    @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, externalId, organizationId])
+  @@index([organizationId])
+  @@map("external_identities")
 }
