@@ -1,0 +1,439 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum MembershipRole {
+  OWNER
+  ADMIN
+  MEMBER
+  TECHNICIAN
+}
+
+enum SubscriptionPlan {
+  FREE
+  PRO
+  BUSINESS
+}
+
+enum JobStatus {
+  DRAFT
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  INVOICED
+}
+
+enum JobItemType {
+  SERVICE
+  PART
+  OTHER
+}
+
+enum InventoryMovementType {
+  IN
+  OUT
+}
+
+enum DocumentStatus {
+  DRAFT
+  SENT
+  ACCEPTED
+  REJECTED
+  PAID
+  CANCELLED
+}
+
+enum SsoProvider {
+  OIDC
+  SAML
+}
+
+enum PaymentProvider {
+  STRIPE
+  LEMONSQUEEZY
+}
+
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  settings  Json     @default("{}")
+  plan      SubscriptionPlan @default(FREE)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  memberships Membership[]
+  customers   Customer[]
+  sites       Site[]
+  jobs        Job[]
+  materials   Material[]
+  inventoryMovements InventoryMovement[]
+  quotes      Quote[]
+  invoices    Invoice[]
+  subscriptions Subscription[]
+
+  ssoConfig OrganizationSsoConfig?
+
+  @@map("organizations")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  firstName    String
+  lastName     String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  memberships Membership[]
+  activities  Activity[]
+  externalIdentities ExternalIdentity[]
+
+  @@map("users")
+}
+
+model Membership {
+  id             String         @id @default(cuid())
+  userId         String
+  organizationId String
+  role           MembershipRole @default(MEMBER)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, organizationId])
+  @@index([organizationId])
+  @@map("memberships")
+}
+
+model Customer {
+  id             String   @id @default(cuid())
+  organizationId String
+  name           String
+  taxId          String?
+  email          String?
+  phone          String?
+  address        String?
+  city           String?
+  postalCode     String?
+  country        String?  @default("IT")
+  notes          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  contacts     Contact[]
+  sites        Site[]
+  jobs         Job[]
+
+  @@index([organizationId])
+  @@index([organizationId, name])
+  @@map("customers")
+}
+
+model Contact {
+  id             String   @id @default(cuid())
+  organizationId String
+  customerId     String
+  name           String
+  email          String?
+  phone          String?
+  role           String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([organizationId, customerId])
+  @@map("contacts")
+}
+
+model Site {
+  id             String   @id @default(cuid())
+  organizationId String
+  customerId     String
+  name           String
+  address        String?
+  city           String?
+  postalCode     String?
+  notes          String?
+  latitude       Float?
+  longitude      Float?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  customer     Customer     @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  jobs         Job[]
+
+  @@index([organizationId])
+  @@index([organizationId, customerId])
+  @@map("sites")
+}
+
+model Job {
+  id             String    @id @default(cuid())
+  organizationId String
+  customerId     String
+  siteId         String?
+  title          String
+  reference      String?
+  status         JobStatus @default(DRAFT)
+  description    String?
+  tags           String[]  @default([])
+  startDate      DateTime?
+  dueDate        DateTime?
+  completedAt    DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  customer     Customer     @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  site         Site?        @relation(fields: [siteId], references: [id], onDelete: SetNull)
+  items        JobItem[]
+  activities   Activity[]
+  materialUsages MaterialUsage[]
+  inventoryMovements InventoryMovement[]
+  quotes       Quote[]
+  invoices     Invoice[]
+
+  @@index([organizationId])
+  @@index([organizationId, status])
+  @@index([organizationId, customerId])
+  @@map("jobs")
+}
+
+model JobItem {
+  id             String      @id @default(cuid())
+  organizationId String
+  jobId          String
+  description    String
+  quantity       Decimal     @default(1) @db.Decimal(12, 4)
+  unitPrice      Decimal     @default(0) @db.Decimal(12, 4)
+  type           JobItemType @default(SERVICE)
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  job Job @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([organizationId, jobId])
+  @@map("job_items")
+}
+
+model Activity {
+  id             String   @id @default(cuid())
+  organizationId String
+  jobId          String
+  userId         String?
+  date           DateTime @default(now())
+  hours          Decimal  @db.Decimal(8, 2)
+  hourlyCost     Decimal  @default(0) @db.Decimal(12, 4)
+  description    String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  job  Job  @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId])
+  @@index([organizationId, jobId])
+  @@map("activities")
+}
+
+model Material {
+  id             String   @id @default(cuid())
+  organizationId String
+  name           String
+  code           String?
+  unit           String   @default("pz")
+  minStock       Decimal? @db.Decimal(12, 4)
+  averageCost    Decimal  @default(0) @db.Decimal(12, 4)
+  stockQuantity  Decimal  @default(0) @db.Decimal(12, 4)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  usages       MaterialUsage[]
+  movements    InventoryMovement[]
+
+  @@index([organizationId])
+  @@unique([organizationId, code])
+  @@map("materials")
+}
+
+model MaterialUsage {
+  id             String   @id @default(cuid())
+  organizationId String
+  jobId          String
+  materialId     String
+  quantity       Decimal  @db.Decimal(12, 4)
+  unitCost       Decimal  @default(0) @db.Decimal(12, 4)
+  notes          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  job      Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  material Material @relation(fields: [materialId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([organizationId, jobId])
+  @@map("material_usages")
+}
+
+model InventoryMovement {
+  id             String                @id @default(cuid())
+  organizationId String
+  materialId     String
+  jobId          String?
+  type           InventoryMovementType
+  quantity       Decimal               @db.Decimal(12, 4)
+  date           DateTime              @default(now())
+  notes          String?
+  createdAt      DateTime              @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  material     Material     @relation(fields: [materialId], references: [id], onDelete: Cascade)
+  job          Job?         @relation(fields: [jobId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId])
+  @@index([organizationId, materialId])
+  @@map("inventory_movements")
+}
+
+model Quote {
+  id             String         @id @default(cuid())
+  organizationId String
+  jobId          String?
+  number         String
+  status         DocumentStatus @default(DRAFT)
+  totalAmount    Decimal        @default(0) @db.Decimal(12, 4)
+  validUntil     DateTime?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  job          Job?         @relation(fields: [jobId], references: [id], onDelete: SetNull)
+  lines        QuoteLine[]
+
+  @@unique([organizationId, number])
+  @@index([organizationId])
+  @@map("quotes")
+}
+
+model QuoteLine {
+  id             String  @id @default(cuid())
+  organizationId String
+  quoteId        String
+  description    String
+  quantity       Decimal @default(1) @db.Decimal(12, 4)
+  unitPrice      Decimal @default(0) @db.Decimal(12, 4)
+  createdAt      DateTime @default(now())
+
+  quote Quote @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([organizationId, quoteId])
+  @@map("quote_lines")
+}
+
+model Invoice {
+  id             String         @id @default(cuid())
+  organizationId String
+  jobId          String?
+  number         String
+  status         DocumentStatus @default(DRAFT)
+  totalAmount    Decimal        @default(0) @db.Decimal(12, 4)
+  issuedAt       DateTime?
+  dueAt          DateTime?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  job          Job?         @relation(fields: [jobId], references: [id], onDelete: SetNull)
+  lines        InvoiceLine[]
+
+  @@unique([organizationId, number])
+  @@index([organizationId])
+  @@map("invoices")
+}
+
+model InvoiceLine {
+  id             String  @id @default(cuid())
+  organizationId String
+  invoiceId      String
+  description    String
+  quantity       Decimal @default(1) @db.Decimal(12, 4)
+  unitPrice      Decimal @default(0) @db.Decimal(12, 4)
+  createdAt      DateTime @default(now())
+
+  invoice Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([organizationId, invoiceId])
+  @@map("invoice_lines")
+}
+
+model Subscription {
+  id                         String           @id @default(cuid())
+  organizationId             String
+  plan                       SubscriptionPlan @default(FREE)
+  paymentProvider            PaymentProvider  @default(STRIPE)
+  stripeCustomerId           String?
+  stripeSubscriptionId       String?
+  lemonSqueezyCustomerId     String?
+  lemonSqueezySubscriptionId String?
+  status                     String           @default("active")
+  currentPeriodEnd           DateTime?
+  createdAt                  DateTime         @default(now())
+  updatedAt                  DateTime         @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@map("subscriptions")
+}
+
+model OrganizationSsoConfig {
+  id             String      @id @default(cuid())
+  organizationId String      @unique
+  provider       SsoProvider
+  enabled        Boolean     @default(false)
+  issuer         String
+  clientId       String?
+  clientSecret   String?
+  metadataUrl    String?
+  idpCert        String?
+  emailAttribute String      @default("email")
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("organization_sso_configs")
+}
+
+model ExternalIdentity {
+  id             String      @id @default(cuid())
+  userId         String
+  organizationId String
+  provider       SsoProvider
+  externalId     String
+  email          String
+  createdAt      DateTime    @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, externalId, organizationId])
+  @@index([organizationId])
+  @@map("external_identities")
+}

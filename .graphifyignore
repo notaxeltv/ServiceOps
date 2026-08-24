@@ -1,0 +1,8 @@
+# Graphify ignore — stessa sintassi di .gitignore
+.git/
+node_modules/
+dist/
+build/
+*.pyc
+.venv/
+venv/
