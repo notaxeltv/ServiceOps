@@ -7,6 +7,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { slugify } from '../common/utils/economics.util';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { SwitchOrganizationDto } from './dto/switch-organization.dto';
 
 @Injectable()
 export class AuthService {
@@ -90,6 +91,20 @@ export class AuthService {
     return this.buildAuthResponse(user, membership.organizationId, membership.role);
   }
 
+  async switchOrganization(userId: string, organizationId: string) {
+    const membership = await this.prisma.membership.findFirst({
+      where: { userId, organizationId },
+    });
+    if (!membership) {
+      throw new UnauthorizedException('Not a member of this organization');
+    }
+
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user) throw new UnauthorizedException('User not found');
+
+    return this.buildAuthResponse(user, organizationId, membership.role);
+  }
+
   async me(userId: string) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
@@ -110,11 +125,16 @@ export class AuthService {
     return user;
   }
 
-  private buildAuthResponse(
+  private async buildAuthResponse(
     user: { id: string; email: string; firstName: string; lastName: string },
     organizationId: string,
     role: MembershipRole,
   ) {
+    const organization = await this.prisma.organization.findUnique({
+      where: { id: organizationId },
+      select: { id: true, name: true, slug: true, plan: true },
+    });
+
     const payload = {
       sub: user.id,
       email: user.email,
@@ -132,6 +152,7 @@ export class AuthService {
         firstName: user.firstName,
         lastName: user.lastName,
         organizationId,
+        organizationName: organization?.name ?? '',
         role,
       },
     };

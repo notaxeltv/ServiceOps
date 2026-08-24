@@ -36,6 +36,13 @@ export class ReportsService {
 
     const customerCount = await this.prisma.customer.count({ where: { organizationId } });
 
+    const lowStockMaterials = await this.prisma.material.findMany({
+      where: { organizationId, minStock: { not: null } },
+    });
+    const lowStockCount = lowStockMaterials.filter(
+      (m) => m.minStock && decimalToNumber(m.stockQuantity) < decimalToNumber(m.minStock),
+    ).length;
+
     return {
       totalRevenue,
       totalMargin,
@@ -44,6 +51,7 @@ export class ReportsService {
       openJobs,
       overdueJobs,
       customerCount,
+      lowStockCount,
     };
   }
 

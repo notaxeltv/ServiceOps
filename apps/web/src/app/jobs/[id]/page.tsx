@@ -59,13 +59,33 @@ export default function JobDetailPage() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ['job', id] }),
   });
 
+  const createQuote = useMutation({
+    mutationFn: () =>
+      apiFetch('/billing/quotes/from-job', { method: 'POST', body: JSON.stringify({ jobId: id }) }, token),
+  });
+
+  const createInvoice = useMutation({
+    mutationFn: () =>
+      apiFetch('/billing/invoices/from-job', { method: 'POST', body: JSON.stringify({ jobId: id }) }, token),
+  });
+
   if (isLoading || !job) return <AuthGuard><AppShell><p>Caricamento...</p></AppShell></AuthGuard>;
 
   return (
     <AuthGuard>
       <AppShell>
         <h2 className="mb-2 text-2xl font-bold">{job.title}</h2>
-        <p className="mb-6 text-slate-500">Cliente: {job.customer.name} · Stato: {job.status}</p>
+        <p className="mb-4 text-slate-500">Cliente: {job.customer.name} · Stato: {job.status}</p>
+        <div className="mb-6 flex gap-2">
+          <Button variant="outline" onClick={() => createQuote.mutate()} disabled={createQuote.isPending}>
+            Crea preventivo
+          </Button>
+          <Button variant="outline" onClick={() => createInvoice.mutate()} disabled={createInvoice.isPending}>
+            Crea fattura
+          </Button>
+          {createQuote.isSuccess && <span className="text-sm text-green-600">Preventivo creato</span>}
+          {createInvoice.isSuccess && <span className="text-sm text-green-600">Fattura creata</span>}
+        </div>
 
         <div className="mb-6 grid gap-4 md:grid-cols-4">
           <Card><p className="text-sm text-slate-500">Ricavi</p><p className="text-xl font-semibold">€{job.economics.revenue.toFixed(2)}</p></Card>

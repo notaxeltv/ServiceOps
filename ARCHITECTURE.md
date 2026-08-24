@@ -92,10 +92,8 @@ Per un prodotto B2B con molte entità correlate e team che evolve, Prisma offre 
 - GitHub Actions: lint, typecheck, test, docker build
 - Dockerfile multi-stage per api e web (standalone Next.js)
 
-## TODO avanzati (priorità 3)
+## Evoluzione futura
 
-- Stripe/Lemon Squeezy webhook handlers
-- Inventory completo con alert scorte minime
-- Billing: creazione preventivi/fatture da job
-- SSO (SAML/OIDC)
-- OpenTelemetry tracing
+- SSO enterprise (SAML/OIDC)
+- OpenTelemetry tracing distribuito
+- Billing avanzato (righe dettaglio su preventivi/fatture, pagamenti parziali)

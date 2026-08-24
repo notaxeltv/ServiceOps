@@ -29,4 +29,9 @@ export class InventoryController {
   createMovement(@CurrentUser() user: AuthUserPayload, @Body() dto: CreateInventoryMovementDto) {
     return this.inventoryService.createMovement(user.organizationId, dto);
   }
+
+  @Get('materials/low-stock')
+  listLowStock(@CurrentUser() user: AuthUserPayload) {
+    return this.inventoryService.listLowStock(user.organizationId);
+  }
 }

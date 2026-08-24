@@ -25,3 +25,17 @@ export class CreateSiteDto {
   @IsOptional() @IsString() postalCode?: string;
   @IsOptional() @IsString() notes?: string;
 }
+
+export class CreateContactDto {
+  @IsString() @MinLength(1) name!: string;
+  @IsOptional() @IsEmail() email?: string;
+  @IsOptional() @IsString() phone?: string;
+  @IsOptional() @IsString() role?: string;
+}
+
+export class UpdateContactDto {
+  @IsOptional() @IsString() @MinLength(1) name?: string;
+  @IsOptional() @IsEmail() email?: string;
+  @IsOptional() @IsString() phone?: string;
+  @IsOptional() @IsString() role?: string;
+}

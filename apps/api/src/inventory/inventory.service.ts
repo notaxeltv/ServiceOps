@@ -63,4 +63,14 @@ export class InventoryService {
       return movement;
     });
   }
+
+  async listLowStock(organizationId: string) {
+    const materials = await this.prisma.material.findMany({
+      where: { organizationId, minStock: { not: null } },
+      orderBy: { name: 'asc' },
+    });
+    return materials.filter(
+      (m) => m.minStock && Number(m.stockQuantity) < Number(m.minStock),
+    );
+  }
 }

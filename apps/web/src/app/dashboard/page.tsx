@@ -15,6 +15,7 @@ interface DashboardKpis {
   openJobs: number;
   overdueJobs: number;
   customerCount: number;
+  lowStockCount: number;
 }
 
 export default function DashboardPage() {
@@ -39,6 +40,11 @@ export default function DashboardPage() {
             <KpiCard title="Commesse in ritardo" value={String(data?.overdueJobs ?? 0)} />
             <KpiCard title="Clienti" value={String(data?.customerCount ?? 0)} />
             <KpiCard title="Commesse totali" value={String(data?.jobCount ?? 0)} />
+            <KpiCard
+              title="Scorte sotto minimo"
+              value={String(data?.lowStockCount ?? 0)}
+              alert={Boolean(data?.lowStockCount && data.lowStockCount > 0)}
+            />
           </div>
         )}
       </AppShell>
@@ -46,9 +52,17 @@ export default function DashboardPage() {
   );
 }
 
-function KpiCard({ title, value }: { title: string; value: string }) {
+function KpiCard({
+  title,
+  value,
+  alert,
+}: {
+  title: string;
+  value: string;
+  alert?: boolean;
+}) {
   return (
-    <Card>
+    <Card className={alert ? 'border-amber-300 bg-amber-50' : undefined}>
       <p className="text-sm text-slate-500">{title}</p>
       <p className="mt-2 text-2xl font-semibold">{value}</p>
     </Card>

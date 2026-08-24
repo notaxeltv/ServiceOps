@@ -1,11 +1,10 @@
 # Graph Report - workspace  (2026-08-24)
 
 ## Corpus Check
-- 99 files · ~31,903 words
-- Verdict: corpus is large enough that graph structure adds value.
+- cluster-only mode — file stats not available
 
 ## Summary
-- 755 nodes · 1211 edges · 49 communities (42 shown, 7 thin omitted)
+- 755 nodes · 1211 edges · 56 communities (44 shown, 12 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 31 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
@@ -39,9 +38,9 @@
 - .cursor/skills/graphify/references/extraction-spec.md
 - auth.decorator.ts
 - dependencies
-- JobsService
-- CrmService
 - AuthUserPayload
+- CrmService
+- ActivitiesService
 - devDependencies
 - ReportsService
 - compilerOptions
@@ -57,6 +56,13 @@
 - config/package.json
 - nest-cli.json
 - next.config.js
+- BillingService
+- web/package.json
+- AppModule
+- @hookform/resolvers
+- lucide-react
+- zod
+- @types/node
 
 ## God Nodes (most connected - your core abstractions)
 1. `AuthUserPayload` - 43 edges
@@ -85,7 +91,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (49 total, 7 thin omitted)
+## Communities (56 total, 12 thin omitted)
 
 ### Community 0 - "useAuth"
 Cohesion: 0.14
@@ -104,8 +110,8 @@ Cohesion: 0.04
 Nodes (48): devDependencies, jest, @nestjs/cli, @nestjs/schematics, @nestjs/testing, prisma, supertest, ts-jest (+40 more)
 
 ### Community 4 - "CurrentUser"
-Cohesion: 0.08
-Nodes (23): BillingController, Controller, Get, BillingModule, Module, BillingService, Injectable, CurrentUser (+15 more)
+Cohesion: 0.13
+Nodes (16): CurrentUser, CreateInventoryMovementDto, CreateMaterialDto, IsEnum, IsNumber, IsOptional, IsString, MinLength (+8 more)
 
 ### Community 5 - "ServiceOps"
 Cohesion: 0.05
@@ -159,21 +165,21 @@ Nodes (23): AuthController, Body, Controller, Get, Post, AuthService, Injectable
 Cohesion: 0.05
 Nodes (37): dependencies, bcrypt, class-transformer, class-validator, csv-stringify, @nestjs/common, @nestjs/config, @nestjs/core (+29 more)
 
-### Community 24 - "JobsService"
-Cohesion: 0.11
-Nodes (20): CreateJobDto, CreateJobItemDto, IsDateString, IsEnum, IsNumber, IsOptional, IsString, MinLength (+12 more)
+### Community 24 - "AuthUserPayload"
+Cohesion: 0.10
+Nodes (23): Get, Query, AuthUserPayload, CreateJobDto, CreateJobItemDto, IsDateString, IsEnum, IsNumber (+15 more)
 
 ### Community 25 - "CrmService"
 Cohesion: 0.11
 Nodes (16): CrmController, Body, Controller, Get, Param, Patch, Post, Query (+8 more)
 
-### Community 26 - "AuthUserPayload"
-Cohesion: 0.12
-Nodes (18): ActivitiesController, Body, Controller, Get, Post, Query, ActivitiesModule, Module (+10 more)
+### Community 26 - "ActivitiesService"
+Cohesion: 0.13
+Nodes (15): ActivitiesController, Body, Controller, Post, ActivitiesModule, Module, ActivitiesService, Injectable (+7 more)
 
 ### Community 27 - "devDependencies"
-Cohesion: 0.07
-Nodes (28): devDependencies, autoprefixer, eslint, eslint-config-next, postcss, tailwindcss, @types/node, @types/react (+20 more)
+Cohesion: 0.12
+Nodes (17): devDependencies, autoprefixer, eslint, eslint-config-next, postcss, tailwindcss, @types/react, @types/react-dom (+9 more)
 
 ### Community 28 - "ReportsService"
 Cohesion: 0.15
@@ -188,16 +194,16 @@ Cohesion: 0.08
 Nodes (25): compilerOptions, allowSyntheticDefaultImports, baseUrl, declaration, emitDecoratorMetadata, esModuleInterop, experimentalDecorators, forceConsistentCasingInFileNames (+17 more)
 
 ### Community 31 - "dependencies"
-Cohesion: 0.09
-Nodes (23): dependencies, class-variance-authority, clsx, @hookform/resolvers, lucide-react, next, react, react-dom (+15 more)
+Cohesion: 0.12
+Nodes (17): dependencies, class-variance-authority, clsx, next, react, react-dom, react-hook-form, tailwind-merge (+9 more)
 
 ### Community 32 - "app.module.ts"
-Cohesion: 0.12
-Nodes (14): AppModule, Module, AuthModule, Module, GlobalExceptionFilter, CrmModule, Module, InventoryModule (+6 more)
+Cohesion: 0.11
+Nodes (16): AuthModule, Module, BillingModule, Module, GlobalExceptionFilter, CrmModule, Module, InventoryModule (+8 more)
 
 ### Community 33 - "OrganizationsService"
-Cohesion: 0.17
-Nodes (9): OrganizationsController, Body, Controller, Get, Patch, OrganizationsModule, Module, OrganizationsService (+1 more)
+Cohesion: 0.20
+Nodes (7): OrganizationsController, Body, Controller, Get, Patch, OrganizationsService, Injectable
 
 ### Community 34 - "compilerOptions"
 Cohesion: 0.12
@@ -227,21 +233,29 @@ Nodes (6): files, name, private, version, eslint.base.cjs, tsconfig.base.json
 Cohesion: 0.33
 Nodes (5): collection, compilerOptions, deleteOutDir, $schema, sourceRoot
 
+### Community 49 - "BillingService"
+Cohesion: 0.21
+Nodes (5): BillingController, Controller, Get, BillingService, Injectable
+
+### Community 50 - "web/package.json"
+Cohesion: 0.20
+Nodes (9): name, private, scripts, build, dev, lint, start, typecheck (+1 more)
+
 ## Knowledge Gaps
-- **286 isolated node(s):** `$schema`, `collection`, `sourceRoot`, `deleteOutDir`, `name` (+281 more)
+- **286 isolated node(s):** `Customer`, `DashboardKpis`, `JobDetail`, `Customer`, `Job` (+281 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **7 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **12 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `AuthUserPayload` connect `AuthUserPayload` to `OrganizationsService`, `CurrentUser`, `users.controller.ts`, `auth.decorator.ts`, `JobsService`, `CrmService`, `ReportsService`?**
+- **Why does `AuthUserPayload` connect `AuthUserPayload` to `OrganizationsService`, `CurrentUser`, `users.controller.ts`, `BillingService`, `auth.decorator.ts`, `CrmService`, `ActivitiesService`, `ReportsService`?**
   _High betweenness centrality (0.038) - this node is a cross-community bridge._
-- **Why does `CurrentUser` connect `CurrentUser` to `OrganizationsService`, `users.controller.ts`, `auth.decorator.ts`, `JobsService`, `CrmService`, `AuthUserPayload`, `ReportsService`?**
+- **Why does `CurrentUser` connect `CurrentUser` to `OrganizationsService`, `users.controller.ts`, `BillingService`, `auth.decorator.ts`, `AuthUserPayload`, `CrmService`, `ActivitiesService`, `ReportsService`?**
   _High betweenness centrality (0.035) - this node is a cross-community bridge._
-- **Why does `PrismaService` connect `PrismaService` to `app.module.ts`, `OrganizationsService`, `CurrentUser`, `users.controller.ts`, `auth.decorator.ts`, `JobsService`, `CrmService`, `AuthUserPayload`, `ReportsService`?**
+- **Why does `PrismaService` connect `PrismaService` to `OrganizationsService`, `CurrentUser`, `users.controller.ts`, `BillingService`, `AppModule`, `auth.decorator.ts`, `AuthUserPayload`, `CrmService`, `ActivitiesService`, `ReportsService`?**
   _High betweenness centrality (0.014) - this node is a cross-community bridge._
-- **What connects `$schema`, `collection`, `sourceRoot` to the rest of the system?**
+- **What connects `Customer`, `DashboardKpis`, `JobDetail` to the rest of the system?**
   _286 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `useAuth` be split into smaller, more focused modules?**
   _Cohesion score 0.14404223227752638 - nodes in this community are weakly interconnected._

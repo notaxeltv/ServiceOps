@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateCustomerDto, CreateSiteDto } from './dto/crm.dto';
+import { CreateCustomerDto, CreateSiteDto, CreateContactDto, UpdateContactDto } from './dto/crm.dto';
 
 @Injectable()
 export class CrmService {
@@ -51,6 +51,43 @@ export class CrmService {
       include: { customer: { select: { id: true, name: true } } },
       orderBy: { name: 'asc' },
     });
+  }
+
+  listContacts(organizationId: string, customerId: string) {
+    return this.prisma.contact.findMany({
+      where: { organizationId, customerId },
+      orderBy: { name: 'asc' },
+    });
+  }
+
+  async createContact(organizationId: string, customerId: string, dto: CreateContactDto) {
+    await this.ensureCustomer(organizationId, customerId);
+    return this.prisma.contact.create({
+      data: { ...dto, organizationId, customerId },
+    });
+  }
+
+  async updateContact(
+    organizationId: string,
+    customerId: string,
+    contactId: string,
+    dto: UpdateContactDto,
+  ) {
+    await this.ensureContact(organizationId, customerId, contactId);
+    return this.prisma.contact.update({ where: { id: contactId }, data: dto });
+  }
+
+  async deleteContact(organizationId: string, customerId: string, contactId: string) {
+    await this.ensureContact(organizationId, customerId, contactId);
+    return this.prisma.contact.delete({ where: { id: contactId } });
+  }
+
+  private async ensureContact(organizationId: string, customerId: string, contactId: string) {
+    const contact = await this.prisma.contact.findFirst({
+      where: { id: contactId, organizationId, customerId },
+    });
+    if (!contact) throw new NotFoundException('Contact not found');
+    return contact;
   }
 
   private async ensureCustomer(organizationId: string, id: string) {

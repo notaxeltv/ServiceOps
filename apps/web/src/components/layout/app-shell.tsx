@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/lib/auth-context';
+import { OrganizationSwitcher } from './organization-switcher';
 
 const links = [
   { href: '/dashboard', label: 'Dashboard' },
@@ -11,6 +12,7 @@ const links = [
   { href: '/jobs', label: 'Commesse' },
   { href: '/activities', label: 'Attività' },
   { href: '/inventory', label: 'Magazzino' },
+  { href: '/billing', label: 'Billing' },
   { href: '/reports', label: 'Report' },
   { href: '/settings', label: 'Impostazioni' },
 ];
@@ -47,7 +49,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <header className="flex items-center justify-between border-b border-slate-200 bg-white px-6 py-4">
           <div>
             <p className="text-sm text-slate-500">Organizzazione</p>
-            <p className="font-medium">{user?.organizationId}</p>
+            <div className="flex items-center gap-3">
+              <p className="font-medium">{user?.organizationName ?? user?.organizationId}</p>
+              <OrganizationSwitcher />
+            </div>
           </div>
           <div className="flex items-center gap-4">
             <span className="text-sm text-slate-600">

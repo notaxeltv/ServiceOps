@@ -1,30 +1,32 @@
 'use client';
 
-import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
+import { loginSchema } from '@/lib/schemas';
 import { Button, Card, Input, Label } from '@/components/ui/primitives';
+import { z } from 'zod';
+
+type LoginForm = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
   const { login } = useAuth();
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setError,
+  } = useForm<LoginForm>({ resolver: zodResolver(loginSchema) });
 
-  const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
+  const onSubmit = async (data: LoginForm) => {
     try {
-      await login(email, password);
+      await login(data.email, data.password);
       router.push('/dashboard');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Errore di accesso');
-    } finally {
-      setLoading(false);
+      setError('root', { message: err instanceof Error ? err.message : 'Errore di accesso' });
     }
   };
 
@@ -32,24 +34,20 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-slate-100 p-4">
       <Card className="w-full max-w-md">
         <h1 className="mb-6 text-2xl font-bold">Accedi a ServiceOps</h1>
-        <form onSubmit={onSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <Input id="email" type="email" {...register('email')} />
+            {errors.email && <p className="text-sm text-red-600">{errors.email.message}</p>}
           </div>
           <div>
             <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <Input id="password" type="password" {...register('password')} />
+            {errors.password && <p className="text-sm text-red-600">{errors.password.message}</p>}
           </div>
-          {error && <p className="text-sm text-red-600">{error}</p>}
-          <Button type="submit" disabled={loading} className="w-full">
-            {loading ? 'Accesso...' : 'Accedi'}
+          {errors.root && <p className="text-sm text-red-600">{errors.root.message}</p>}
+          <Button type="submit" disabled={isSubmitting} className="w-full">
+            {isSubmitting ? 'Accesso...' : 'Accedi'}
           </Button>
         </form>
         <p className="mt-4 text-center text-sm text-slate-500">
